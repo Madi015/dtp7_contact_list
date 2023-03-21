@@ -83,22 +83,33 @@ namespace dtp7_contact_list
                 }
                 else if (commandLine[0] == "load")
                 {
-                    if (commandLine.Length == 1)
+                    try
                     {
-                        lastFileName = GetUserDirectory("address.lis");
-                        LoadContactListFromFile(lastFileName);
+                        if (commandLine.Length == 1)
+                        {
+                            lastFileName = GetUserDirectory("address.lis");
+                            LoadContactListFromFile(lastFileName);
+                            //TODO skapa en fil i 
+                        }
+                        else if (commandLine.Length == 2)
+                        {
+                            lastFileName = GetUserDirectory(commandLine[1]); // commandLine[1] is the first argument
+                                                                             // FIXME: Throws System.IO.FileNotFoundException: 
+                            LoadContactListFromFile(lastFileName);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Usage:");
+                            Console.WriteLine("  load                        - load contact list data from the file address.lis");
+                            Console.WriteLine("  load /file/                 - load contact list data from the file");
+                        }
+
                     }
-                    else if (commandLine.Length == 2)
+                    catch (System.IO.FileNotFoundException)
                     {
-                        lastFileName = GetUserDirectory(commandLine[1]); // commandLine[1] is the first argument
-                        // FIXME: Throws System.IO.FileNotFoundException: 
-                        LoadContactListFromFile(lastFileName);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Usage:");
-                        Console.WriteLine("  load                        - load contact list data from the file address.lis");
-                        Console.WriteLine("  load /file/                 - load contact list data from the file");
+
+                        Console.WriteLine($"filen finns inte ");
+                        // FIXME 
                     }
                 }
                 else if (commandLine[0] == "save")
