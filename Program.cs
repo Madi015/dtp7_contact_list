@@ -61,6 +61,7 @@ namespace dtp7_contact_list
                     else if (commandLine.Length == 3)
                     {
                         DeleteAllPersons(commandLine[1], commandLine[2]);
+                        //FIXME den ska tala om ifall personen inte finns 
                     }
                     else
                     {
@@ -172,6 +173,11 @@ namespace dtp7_contact_list
                     if (contactList[i].persname == persname && contactList[i].surname ==surname)
                     {
                         found = i; break; // breaks the for loop
+                    }
+                    else if (contactList[i].persname != persname && contactList[i].surname != surname)
+                    {
+                        Console.WriteLine("Personen finns inte.");
+                        break;
                     }
                 }
                 if (found == -1) break; // breaks the do loop
