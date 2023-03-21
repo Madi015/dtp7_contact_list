@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Net;
 
 namespace dtp7_contact_list
 {
@@ -132,23 +134,32 @@ namespace dtp7_contact_list
                 }
                 else if (commandLine[0] == "new")
                 {
-                    if (commandLine.Length == 1)
+                    // FIXME, The new method is not working.
+                    try
                     {
-                        Console.Write("personal name: ");
-                        string persname = Console.ReadLine();
-                        Console.Write("surname: ");
-                        string surname = Console.ReadLine();
-                        AddAndSetupNewPerson(persname, surname);
+                        if (commandLine.Length == 1)
+                        {
+                            Console.Write("personal name: ");
+                            string persname = Console.ReadLine();
+                            Console.Write("surname: ");
+                            string surname = Console.ReadLine();
+                            AddAndSetupNewPerson(persname, surname);
+                        }
+                        else if (commandLine.Length == 3)
+                        {
+                            AddAndSetupNewPerson(commandLine[1], commandLine[2]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Usage:");
+                            Console.WriteLine("  new                         - create new person");
+                            Console.WriteLine("  new /persname/ /surname/    - create new person with personal name and surname");
+                        }
+
                     }
-                    else if (commandLine.Length == 3)
+                    catch (System.NullReferenceException)
                     {
-                        AddAndSetupNewPerson(commandLine[1], commandLine[2]);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Usage:");
-                        Console.WriteLine("  new                         - create new person");
-                        Console.WriteLine("  new /persname/ /surname/    - create new person with personal name and surname");
+                        Console.WriteLine("It doesn't work right now.");
                     }
                 }
                 else if (commandLine[0] == "help")
@@ -197,21 +208,27 @@ namespace dtp7_contact_list
         private static void AddAndSetupNewPerson(string persname, string surname)
         {
             Person newPerson = new Person(persname, surname);
+            
             Console.WriteLine("Add multiple phones, end with empty string:");
             do
             {
                 Console.Write("  phone: ");
                 string phone = Console.ReadLine();
                 if (phone == "") break;
-                newPerson.AddPhone(phone);
+
+                newPerson.phone = new List<string>();
+                newPerson.phone.Add(phone);
+
             } while (true);
             Console.WriteLine("Add multiple addresses, end with empty string:");
             do
             {
                 Console.Write("  address: ");
-                string phone = Console.ReadLine();
-                if (phone == "") break;
-                newPerson.AddPhone(phone);
+                string address = Console.ReadLine();
+                if (address == "") break;
+                newPerson.address = new List<string>();
+                newPerson.AddPhone(address);
+
             } while (true);
             Console.Write("birth date: ");
             string birthdate = Console.ReadLine();
